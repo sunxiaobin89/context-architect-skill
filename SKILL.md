@@ -4,7 +4,7 @@ description: "Manages project documentation and context alignment. MUST be invok
 license: MIT
 metadata:
   author: daydream
-  version: "1.0.0"
+  version: "1.1.0"
 allowed-tools: "Host-managed safe file operations only; no external shell commands"
 triggers:
   - "初始化项目上下文"

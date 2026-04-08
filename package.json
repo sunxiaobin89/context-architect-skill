@@ -1,6 +1,6 @@
 {
   "name": "context-architect",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Enforce the 6-Doc Protocol for AI-assisted development.",
   "main": "index.js",
   "scripts": {
