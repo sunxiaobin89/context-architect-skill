@@ -1,2 +1,6 @@
-.agents/
-.DS_Store
+node_modules/
+.env
+.promptfoo/
+coverage/
+dist/
+build/

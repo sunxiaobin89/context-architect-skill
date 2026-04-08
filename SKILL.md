@@ -1,6 +1,6 @@
 ---
 name: "context-architect"
-description: "Manages project documentation and context alignment. Invoke when user wants to initialize project structure, check document completeness, or ensure code aligns with specs."
+description: "Manages project documentation and context alignment. MUST be invoked for ALL feature development, refactoring, or coding tasks to enforce the Doc-First policy."
 license: MIT
 metadata:
   author: daydream
@@ -10,9 +10,20 @@ triggers:
   - "初始化项目上下文"
   - "校验 6-Doc 完整性"
   - "对齐实现与规范"
+  - "开发新功能"
+  - "修改现有功能"
+  - "更新项目文档"
+  - "写代码"
+  - "重构"
+  - "实现"
   - "Initialize project context"
   - "Validate 6-Doc completeness"
   - "Align implementation with specs"
+  - "Implement feature"
+  - "Update context"
+  - "build"
+  - "create"
+  - "refactor"
 ---
 
 # Context Architect Skill
@@ -30,7 +41,13 @@ This skill enforces the "6-Doc Protocol" for AI-assisted development, ensuring a
     - Checks if all 6 documents exist in `docs/context/` and are non-empty.
     - Warns if critical sections (e.g., "Tech Stack versions") are missing.
 
-3.  **Align Context (`align`)**:
+3.  **Update Context (`update` - DOC-FIRST ENFORCEMENT)**:
+    - Triggered when the user requests a feature, refactor, or modification.
+    - **TRIVIAL TASK BYPASS**: If the request is extremely simple (e.g., fixing a typo, code explanation, formatting, adding comments, renaming a variable within a single file), SKIP the doc update and proceed directly to answering or fixing.
+    - For non-trivial tasks, analyzes the request and UPDATES the relevant documents (`PRD.md`, `APP_FLOW.md`, `IMPLEMENTATION_PLAN.md`) FIRST.
+    - For non-trivial tasks, NEVER write or modify source code before the context documents are updated and the implementation plan is clear.
+
+4.  **Align Context (`align`)**:
     - Reads relevant docs from `docs/context/` into context before major coding tasks.
     - Ensures implementation matches `TECH_STACK.md` and `FRONTEND_GUIDELINES.md`.
 
@@ -50,7 +67,14 @@ Before writing code:
 
 **Action**: The skill will scan `docs/context/` and report missing or incomplete files.
 
-### 3. Alignment (Automatic)
+### 3. Update & Implement (Doc-First)
+When asking for a new feature:
+> "Implement the login page."
+> "开发登录页"
+
+**Action**: The skill will FIRST update `PRD.md`, `APP_FLOW.md`, and `IMPLEMENTATION_PLAN.md` based on the request. Only after these docs are updated will it start writing source code.
+
+### 4. Alignment (Automatic)
 When user asks for code:
 > "Implement the login page."
 
@@ -67,7 +91,8 @@ When user asks for code:
 
 ## 触发与输出约定
 
-- 触发短语：当用户表达“初始化项目上下文”“校验 6-Doc 完整性”“对齐实现与规范”时启用本技能。
+- 触发短语：当用户表达“初始化项目上下文”“校验 6-Doc 完整性”“对齐实现与规范”“开发新功能”等时启用本技能。
+- 强制文档先行：无论何时被唤醒进行功能开发，必须先更新 `docs/context/` 中的相关文档（特别是 `PRD.md`、`APP_FLOW.md` 和 `IMPLEMENTATION_PLAN.md`），再编写源代码。
 - 输出风格：所有检查与建议均以结构化条目形式给出（文件 → 问题 → 建议），支持可选的 `--json` 机器可读输出。
 - 干运行模式：所有创建/修改操作默认先生成差异报告，需显式确认后再执行。
 
@@ -93,6 +118,14 @@ When user asks for code:
 - 检查：存在性、非空性、必填章节齐全
 - 输出：结构化报告（file → issue → suggestion），支持 `--json`
 - 失败：缺失关键文档或关键章节时拒绝进入实现阶段
+
+### update：更新上下文（文档先行强制策略）
+
+- 目标：确保任何实质性代码变更前，需求与计划已被文档化。
+- 触发：用户请求开发新功能、重构或修改现有逻辑。
+- 豁免（Bypass）：如果请求是极小改动（如修复拼写、代码解释、格式化、单文件内变量重命名），则跳过文档更新，直接执行。
+- 动作：对于非豁免任务，首先更新 `docs/context/` 中的相关文档（如 `PRD.md`, `APP_FLOW.md`, `IMPLEMENTATION_PLAN.md`）。
+- 约束：对于非豁免任务，在 `IMPLEMENTATION_PLAN.md` 明确具体的实施步骤前，**严禁编写或修改任何源代码**。
 
 ### align：对齐实现与规范
 

@@ -1,0 +1,13 @@
+You are an AI coding assistant integrated into an IDE.
+The user has installed a specific skill that you MUST follow.
+
+<skill_definition>
+{{skill_content}}
+</skill_definition>
+
+The user has just made the following request:
+<user_request>
+{{user_input}}
+</user_request>
+
+Based on the skill definition, how do you respond to the user? Describe your actions step by step.

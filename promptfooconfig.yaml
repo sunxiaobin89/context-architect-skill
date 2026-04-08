@@ -1,0 +1,45 @@
+description: "Context Architect Skill Evals"
+
+# 使用 tests/prompt.txt 作为大模型的输入，把用户问题和 SKILL.md 组装在一起
+prompts:
+  - file://tests/prompt.txt
+
+# 配置大模型，这里使用硅基流动的免费高智商开源模型（Qwen2.5-72B）
+providers:
+  - id: openai:chat:Qwen/Qwen2.5-72B-Instruct
+    config:
+      apiBaseUrl: https://api.siliconflow.cn/v1
+      apiKeyEnvar: SILICONFLOW_API_KEY
+
+# 通过 defaultTest 变量，将根目录的 SKILL.md 文件内容动态注入到 Prompt 中
+# 这保证了测试框架完全不侵入 SKILL.md 原文件
+defaultTest:
+  vars:
+    skill_content: file://SKILL.md
+
+# 测试用例
+tests:
+  - description: "[豁免测试] 微小任务 - 修复拼写错误"
+    vars:
+      user_input: "把 utils.js 里的 usre 拼写错误改成 user"
+    assert:
+      - type: not-icontains
+        value: "PRD.md"
+        weight: 1
+      - type: not-icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: icontains
+        value: "utils.js"
+        weight: 1
+
+  - description: "[拦截测试] 核心业务 - 开发新页面"
+    vars:
+      user_input: "帮我开发一个完整的用户登录和注册页面"
+    assert:
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1

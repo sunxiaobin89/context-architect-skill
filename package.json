@@ -1,0 +1,24 @@
+{
+  "name": "context-architect",
+  "version": "1.0.0",
+  "description": "Enforce the 6-Doc Protocol for AI-assisted development.",
+  "main": "index.js",
+  "scripts": {
+    "test": "promptfoo eval"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunxiaobin89/context-architect-skill.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sunxiaobin89/context-architect-skill/issues"
+  },
+  "homepage": "https://github.com/sunxiaobin89/context-architect-skill#readme",
+  "devDependencies": {
+    "promptfoo": "^0.120.19"
+  }
+}

@@ -12,18 +12,31 @@
 npx skillsadd <owner/repo>
 ```
 
+## 最佳实践：如何做到 100%“文档永远先行”（中文）
+虽然本技能内置了 `update` 强制文档先行的工作流，但为防止 AI IDE 在面对极为简短的编码指令（如“写个按钮”）时绕过技能直接输出代码，建议用户采取以下双重保障：
+
+1. **技能自然拦截（本技能已内置）**：触发词已扩展至“写代码”、“重构”、“实现”等通用意图，最大化拦截直接编码请求。
+2. **全局规则兜底（强烈推荐）**：在项目根目录创建 `.traerules` 或 `.cursorrules` 文件，写入以下系统级提示词，形成强制约束：
+   > "本项目采用 6-Doc 协议进行开发。对于开发新功能、架构调整或复杂重构的请求，你必须首先调用 Context Architect skill 更新 `docs/context/` 目录下的相关 Markdown 文档，严禁无计划直接写代码。但对于极小改动（如修复拼写错误、代码解释、格式化、单文件局部变量重命名等），请直接执行，无需更新文档。"
+
 ## 触发与能力（中文）
 - 触发短语（中文）：
   - 初始化项目上下文
   - 校验 6-Doc 完整性
   - 对齐实现与规范
+  - 开发新功能
+  - 修改现有功能
+  - 更新项目文档
 - 触发短语（英文）：
   - Initialize project context
   - Validate 6-Doc completeness
   - Align implementation with specs
+  - Implement feature
+  - Update context
 - 能力概述：
   - init：创建 `docs/context/` 与六个文档模板（默认干运行，确认后写入）
   - validate：检查六文档的存在性/非空性/必填章节，输出结构化报告（支持 `--json`）
+  - update：强制文档先行策略，在开发新功能或修改逻辑前自动更新相关文档，严禁无文档直接编码
   - align：读取 `TECH_STACK.md` 与 `FRONTEND_GUIDELINES.md` 等，对齐实现并输出偏差与建议（只读）
 
 ## 语言策略（中文）
@@ -178,14 +191,24 @@ npx skillsadd <owner/repo>
 npx skillsadd <owner/repo>
 ```
 
+## Best Practices: Enforcing 100% "Doc-First" (English)
+While this skill natively includes the `update` workflow to enforce doc-first development, AI IDEs might occasionally bypass the skill if the user's prompt is too brief (e.g., "make a button"). To guarantee a strict doc-first workflow, use this dual-layer approach:
+
+1. **Skill Interception (Built-in)**: Triggers have been broadened to include generic intents like "build", "create", and "refactor" to catch coding requests naturally.
+2. **Global Rule Fallback (Highly Recommended)**: Create a `.traerules` or `.cursorrules` file in your project root with the following system prompt:
+   > "This project strictly follows the 6-Doc Protocol. For new features, architectural changes, or complex refactoring, you MUST first invoke the Context Architect skill to update the relevant Markdown files in `docs/context/` before writing code. However, for trivial tasks (e.g., fixing typos, explaining code, formatting, renaming local variables), you may bypass the document update and execute the task directly."
+
 ## Triggers & Capabilities (English)
 - Triggers:
   - Initialize project context
   - Validate 6-Doc completeness
   - Align implementation with specs
+  - Implement feature
+  - Update context
 - Capabilities:
   - init: Create `docs/context/` and six doc templates (dry-run by default, write on confirmation)
   - validate: Check existence/non-empty/required sections; produce structured report (`--json` supported)
+  - update: Enforce doc-first policy by updating PRD, APP_FLOW, and IMPLEMENTATION_PLAN before any code is written
   - align: Read `TECH_STACK.md` / `FRONTEND_GUIDELINES.md`, verify alignment; output deviations and suggestions (read-only)
 
 ## Language Policy (English)
