@@ -10,20 +10,12 @@ triggers:
   - "初始化项目上下文"
   - "校验 6-Doc 完整性"
   - "对齐实现与规范"
-  - "开发新功能"
-  - "修改现有功能"
   - "更新项目文档"
-  - "写代码"
-  - "重构"
-  - "实现"
   - "Initialize project context"
   - "Validate 6-Doc completeness"
   - "Align implementation with specs"
-  - "Implement feature"
   - "Update context"
-  - "build"
-  - "create"
-  - "refactor"
+  - "Enforce 6-Doc Protocol"
 ---
 
 # Context Architect Skill
@@ -44,8 +36,8 @@ This skill enforces the "6-Doc Protocol" for AI-assisted development, ensuring a
 3.  **Update Context (`update` - DOC-FIRST ENFORCEMENT)**:
     - Triggered when the user requests a feature, refactor, or modification.
     - **TRIVIAL TASK BYPASS**: If the request is extremely simple (e.g., fixing a typo, code explanation, formatting, adding comments, renaming a variable within a single file), SKIP the doc update and proceed directly to answering or fixing.
-    - For non-trivial tasks, analyzes the request and UPDATES the relevant documents (`PRD.md`, `APP_FLOW.md`, `IMPLEMENTATION_PLAN.md`) FIRST.
-    - For non-trivial tasks, NEVER write or modify source code before the context documents are updated and the implementation plan is clear.
+    - For non-trivial tasks, analyzes the request and PROACTIVELY DRAFTS or UPDATES the relevant documents (`PRD.md`, `APP_FLOW.md`, `IMPLEMENTATION_PLAN.md`).
+    - The AI should attempt to update the documentation and propose the corresponding code changes in the same workflow, rather than blocking the user to wait for document approval.
 
 4.  **Align Context (`align`)**:
     - Reads relevant docs from `docs/context/` into context before major coding tasks.
@@ -72,7 +64,7 @@ When asking for a new feature:
 > "Implement the login page."
 > "开发登录页"
 
-**Action**: The skill will FIRST update `PRD.md`, `APP_FLOW.md`, and `IMPLEMENTATION_PLAN.md` based on the request. Only after these docs are updated will it start writing source code.
+**Action**: The skill will proactively update `PRD.md`, `APP_FLOW.md`, and `IMPLEMENTATION_PLAN.md` based on the request, and can simultaneously propose or implement the requested source code changes.
 
 ### 4. Alignment (Automatic)
 When user asks for code:
@@ -92,9 +84,9 @@ When user asks for code:
 ## 触发与输出约定
 
 - 触发短语：当用户表达“初始化项目上下文”“校验 6-Doc 完整性”“对齐实现与规范”“开发新功能”等时启用本技能。
-- 强制文档先行：无论何时被唤醒进行功能开发，必须先更新 `docs/context/` 中的相关文档（特别是 `PRD.md`、`APP_FLOW.md` 和 `IMPLEMENTATION_PLAN.md`），再编写源代码。
-- 输出风格：所有检查与建议均以结构化条目形式给出（文件 → 问题 → 建议），支持可选的 `--json` 机器可读输出。
-- 干运行模式：所有创建/修改操作默认先生成差异报告，需显式确认后再执行。
+- 推荐文档先行：在进行复杂功能开发时，建议主动起草或维护 `docs/context/` 中的相关文档（特别是 `PRD.md`、`APP_FLOW.md` 和 `IMPLEMENTATION_PLAN.md`），并与代码编写同步进行，保持高效协同，而非生硬地阻塞用户流程。
+- 输出风格：所有检查与建议均以结构化条目形式给出（文件 → 问题 → 建议）。
+- 确认模式：进行任何实质性的文件重写或覆盖操作之前，需向用户展示拟定更改的大纲并等待确认。
 
 ## 安全约束与边界
 
@@ -119,13 +111,13 @@ When user asks for code:
 - 输出：结构化报告（file → issue → suggestion），支持 `--json`
 - 失败：缺失关键文档或关键章节时拒绝进入实现阶段
 
-### update：更新上下文（文档先行强制策略）
+### update：更新上下文（文档协同策略）
 
-- 目标：确保任何实质性代码变更前，需求与计划已被文档化。
+- 目标：确保任何实质性代码变更前，需求与计划已被思考并文档化。
 - 触发：用户请求开发新功能、重构或修改现有逻辑。
 - 豁免（Bypass）：如果请求是极小改动（如修复拼写、代码解释、格式化、单文件内变量重命名），则跳过文档更新，直接执行。
-- 动作：对于非豁免任务，首先更新 `docs/context/` 中的相关文档（如 `PRD.md`, `APP_FLOW.md`, `IMPLEMENTATION_PLAN.md`）。
-- 约束：对于非豁免任务，在 `IMPLEMENTATION_PLAN.md` 明确具体的实施步骤前，**严禁编写或修改任何源代码**。
+- 动作：对于非豁免任务，主动起草或更新 `docs/context/` 中的相关文档（如 `PRD.md`, `APP_FLOW.md`, `IMPLEMENTATION_PLAN.md`）。
+- 协同：在更新文档的同时，可以并行为用户生成或修改源代码。不要因为缺少部分文档确认而生硬地阻塞开发流程。
 
 ### align：对齐实现与规范
 

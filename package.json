@@ -10,6 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/sunxiaobin89/context-architect-skill.git"
   },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "LICENSE.txt"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

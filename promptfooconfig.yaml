@@ -11,11 +11,11 @@ providers:
       apiBaseUrl: https://api.siliconflow.cn/v1
       apiKeyEnvar: SILICONFLOW_API_KEY
 
-# 通过 defaultTest 变量，将根目录的 SKILL.md 文件内容动态注入到 Prompt 中
+# 通过 defaultTest 变量，将技能目录的 SKILL.md 文件内容动态注入到 Prompt 中
 # 这保证了测试框架完全不侵入 SKILL.md 原文件
 defaultTest:
   vars:
-    skill_content: file://SKILL.md
+    skill_content: file://skills/context-architect/SKILL.md
 
 # 测试用例
 tests:

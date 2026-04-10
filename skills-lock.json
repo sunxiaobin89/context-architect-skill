@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "context-architect": {
+      "source": "sunxiaobin89/context-architect-skill",
+      "sourceType": "github",
+      "computedHash": "b92797cbcd4cd45b788923fbcb855fe97025de56ee77afb1c243021ef4d680a8"
+    }
+  }
+}
