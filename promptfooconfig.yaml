@@ -11,15 +11,13 @@ providers:
       apiBaseUrl: https://api.siliconflow.cn/v1
       apiKeyEnvar: SILICONFLOW_API_KEY
 
-# 通过 defaultTest 变量，将技能目录的 SKILL.md 文件内容动态注入到 Prompt 中
-# 这保证了测试框架完全不侵入 SKILL.md 原文件
 defaultTest:
   vars:
     skill_content: file://skills/context-architect/SKILL.md
 
 # 测试用例
 tests:
-  - description: "[豁免测试] 微小任务 - 修复拼写错误"
+  - description: "[中文提问] 豁免测试：微小任务 - 修复拼写错误"
     vars:
       user_input: "把 utils.js 里的 usre 拼写错误改成 user"
     assert:
@@ -33,7 +31,21 @@ tests:
         value: "utils.js"
         weight: 1
 
-  - description: "[拦截测试] 核心业务 - 开发新页面"
+  - description: "[英文提问] 豁免测试：微小任务 - 修复拼写错误"
+    vars:
+      user_input: "Fix the typo 'usre' to 'user' in utils.js"
+    assert:
+      - type: not-icontains
+        value: "PRD.md"
+        weight: 1
+      - type: not-icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: icontains
+        value: "utils.js"
+        weight: 1
+
+  - description: "[中文提问] 拦截测试：核心业务 - 开发新页面"
     vars:
       user_input: "帮我开发一个完整的用户登录和注册页面"
     assert:
@@ -42,4 +54,105 @@ tests:
         weight: 1
       - type: icontains
         value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+
+  - description: "[英文提问] 拦截测试：核心业务 - 开发新页面"
+    vars:
+      user_input: "Help me develop a complete user login and registration page"
+    assert:
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+
+  - description: "[中文提问] 初始化测试：init - 创建文档结构"
+    vars:
+      user_input: "初始化项目上下文"
+    assert:
+      - type: icontains
+        value: "docs/context/"
+        weight: 1
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: regex
+        value: "文件|创建|写入|确定|是否"
+        weight: 1
+
+  - description: "[英文提问] 初始化测试：init - 创建文档结构"
+    vars:
+      user_input: "Initialize project context"
+    assert:
+      - type: icontains
+        value: "docs/context/"
+        weight: 1
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: regex
+        value: "(?i)(file|create|write|read)"
+        weight: 1
+
+  - description: "[中文提问] 校验测试：validate - 检查并输出 JSON 报告"
+    vars:
+      user_input: "校验 6-Doc 完整性，使用 --json 格式"
+    assert:
+      - type: icontains
+        value: "{"
+        weight: 1
+      - type: icontains
+        value: "reports"
+        weight: 1
+      - type: icontains
+        value: "file"
+        weight: 1
+      - type: icontains
+        value: "issue"
+        weight: 1
+
+  - description: "[英文提问] 校验测试：validate - 检查并输出 JSON 报告"
+    vars:
+      user_input: "Validate 6-Doc completeness, use --json format"
+    assert:
+      - type: icontains
+        value: "{"
+        weight: 1
+      - type: icontains
+        value: "reports"
+        weight: 1
+      - type: icontains
+        value: "file"
+        weight: 1
+      - type: icontains
+        value: "issue"
+        weight: 1
+
+  - description: "[中文提问] 对齐测试：align - 遵循规范"
+    vars:
+      user_input: "对齐实现与规范，准备开发"
+    assert:
+      - type: icontains
+        value: "TECH_STACK.md"
+        weight: 1
+      - type: icontains
+        value: "FRONTEND_GUIDELINES.md"
+        weight: 1
+
+  - description: "[英文提问] 对齐测试：align - 遵循规范"
+    vars:
+      user_input: "Align implementation with specs, ready for development"
+    assert:
+      - type: icontains
+        value: "TECH_STACK.md"
+        weight: 1
+      - type: icontains
+        value: "FRONTEND_GUIDELINES.md"
         weight: 1
