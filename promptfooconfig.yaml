@@ -43,3 +43,44 @@ tests:
       - type: icontains
         value: "IMPLEMENTATION_PLAN.md"
         weight: 1
+
+  - description: "[初始化测试] init - 创建文档结构"
+    vars:
+      user_input: "初始化项目上下文"
+    assert:
+      - type: icontains
+        value: "docs/context/"
+        weight: 1
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: llm-rubric
+        value: "The response must indicate that it will use file tools to create the directories and files, and ask for confirmation before writing."
+
+  - description: "[校验测试] validate - 检查并输出 JSON 报告"
+    vars:
+      user_input: "校验 6-Doc 完整性，使用 --json 格式"
+    assert:
+      - type: is-json
+        weight: 1
+      - type: icontains
+        value: "reports"
+        weight: 1
+      - type: llm-rubric
+        value: "The response must be valid JSON and contain a 'reports' array with objects having 'file', 'status', 'issue', and 'suggestion' keys."
+
+  - description: "[对齐测试] align - 遵循规范"
+    vars:
+      user_input: "对齐实现与规范，准备开发"
+    assert:
+      - type: icontains
+        value: "TECH_STACK.md"
+        weight: 1
+      - type: icontains
+        value: "FRONTEND_GUIDELINES.md"
+        weight: 1
+      - type: llm-rubric
+        value: "The response must mention reading TECH_STACK.md and FRONTEND_GUIDELINES.md before starting implementation."
