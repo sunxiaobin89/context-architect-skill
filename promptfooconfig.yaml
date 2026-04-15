@@ -19,7 +19,7 @@ defaultTest:
 
 # 测试用例
 tests:
-  - description: "[豁免测试] 微小任务 - 修复拼写错误"
+  - description: "[中文提问] 豁免测试：微小任务 - 修复拼写错误"
     vars:
       user_input: "把 utils.js 里的 usre 拼写错误改成 user"
     assert:
@@ -33,7 +33,21 @@ tests:
         value: "utils.js"
         weight: 1
 
-  - description: "[拦截测试] 核心业务 - 开发新页面"
+  - description: "[英文提问] 豁免测试：微小任务 - 修复拼写错误"
+    vars:
+      user_input: "Fix the typo 'usre' to 'user' in utils.js"
+    assert:
+      - type: not-icontains
+        value: "PRD.md"
+        weight: 1
+      - type: not-icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: icontains
+        value: "utils.js"
+        weight: 1
+
+  - description: "[中文提问] 拦截测试：核心业务 - 开发新页面"
     vars:
       user_input: "帮我开发一个完整的用户登录和注册页面"
     assert:
@@ -44,7 +58,18 @@ tests:
         value: "IMPLEMENTATION_PLAN.md"
         weight: 1
 
-  - description: "[初始化测试] init - 创建文档结构"
+  - description: "[英文提问] 拦截测试：核心业务 - 开发新页面"
+    vars:
+      user_input: "Help me develop a complete user login and registration page"
+    assert:
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+
+  - description: "[中文提问] 初始化测试：init - 创建文档结构"
     vars:
       user_input: "初始化项目上下文"
     assert:
@@ -58,9 +83,25 @@ tests:
         value: "IMPLEMENTATION_PLAN.md"
         weight: 1
       - type: llm-rubric
-        value: "The response must indicate that it will use file tools to create the directories and files, and ask for confirmation before writing."
+        value: "The response must indicate that it will use file tools to create the directories and files, and ask for confirmation before writing. The reply must be in Chinese."
 
-  - description: "[校验测试] validate - 检查并输出 JSON 报告"
+  - description: "[英文提问] 初始化测试：init - 创建文档结构"
+    vars:
+      user_input: "Initialize project context"
+    assert:
+      - type: icontains
+        value: "docs/context/"
+        weight: 1
+      - type: icontains
+        value: "PRD.md"
+        weight: 1
+      - type: icontains
+        value: "IMPLEMENTATION_PLAN.md"
+        weight: 1
+      - type: llm-rubric
+        value: "The response must indicate that it will use file tools to create the directories and files, and ask for confirmation before writing. The reply must be in English."
+
+  - description: "[中文提问] 校验测试：validate - 检查并输出 JSON 报告"
     vars:
       user_input: "校验 6-Doc 完整性，使用 --json 格式"
     assert:
@@ -70,9 +111,21 @@ tests:
         value: "reports"
         weight: 1
       - type: llm-rubric
-        value: "The response must be valid JSON and contain a 'reports' array with objects having 'file', 'status', 'issue', and 'suggestion' keys."
+        value: "The response must be valid JSON and contain a 'reports' array with objects having 'file', 'status', 'issue', and 'suggestion' keys. The values for 'issue' and 'suggestion' must be in Chinese."
 
-  - description: "[对齐测试] align - 遵循规范"
+  - description: "[英文提问] 校验测试：validate - 检查并输出 JSON 报告"
+    vars:
+      user_input: "Validate 6-Doc completeness, use --json format"
+    assert:
+      - type: is-json
+        weight: 1
+      - type: icontains
+        value: "reports"
+        weight: 1
+      - type: llm-rubric
+        value: "The response must be valid JSON and contain a 'reports' array with objects having 'file', 'status', 'issue', and 'suggestion' keys. The values for 'issue' and 'suggestion' must be in English."
+
+  - description: "[中文提问] 对齐测试：align - 遵循规范"
     vars:
       user_input: "对齐实现与规范，准备开发"
     assert:
@@ -83,4 +136,17 @@ tests:
         value: "FRONTEND_GUIDELINES.md"
         weight: 1
       - type: llm-rubric
-        value: "The response must mention reading TECH_STACK.md and FRONTEND_GUIDELINES.md before starting implementation."
+        value: "The response must mention reading TECH_STACK.md and FRONTEND_GUIDELINES.md before starting implementation. The reply must be in Chinese."
+
+  - description: "[英文提问] 对齐测试：align - 遵循规范"
+    vars:
+      user_input: "Align implementation with specs, ready for development"
+    assert:
+      - type: icontains
+        value: "TECH_STACK.md"
+        weight: 1
+      - type: icontains
+        value: "FRONTEND_GUIDELINES.md"
+        weight: 1
+      - type: llm-rubric
+        value: "The response must mention reading TECH_STACK.md and FRONTEND_GUIDELINES.md before starting implementation. The reply must be in English."
